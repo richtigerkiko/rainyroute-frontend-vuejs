@@ -25,7 +25,7 @@ export async function sendRouteRequest(request: routeRequestObject): Promise<Rou
 export async function searchCityWithNomatim(searchString: string): Promise<CitysearchResult[]> {
     
     const baseUrl = import.meta.env.VITE_APIENDPOINT_CITYSEARCH
-    const endpoint = `search?q=${searchString}&format=json&limit=5`
+    const endpoint = `/search?q=${searchString}&format=json&limit=5`
     const url = baseUrl + endpoint
 
     const response = await fetch(url)
