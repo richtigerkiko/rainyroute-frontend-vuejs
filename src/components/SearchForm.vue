@@ -12,13 +12,13 @@
             <div class="col">
                 <div class="input-group m-3">
                     <span class="input-group-text" id="basic-addon1">Start Date</span>
-                    <input type="datetime-local" class="form-control" v-model="routeRequestObject.startDate">
+                    <input type="datetime-local" class="form-control" v-model="routeInfos.startDate">
                 </div>
             </div>
         </div>
         <div class="row mb-3">
             <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary">Go</button>
+                <button class="btn btn-primary" @click="getroute">Go</button>
             </div>
         </div>
     </div>
@@ -27,15 +27,16 @@
 <script setup lang="ts">
 import type { CitysearchResult } from "@/models/citysearchResult";
 import Searchbar from "./Searchbar.vue"
+const emit = defineEmits(['sendrouterequest'])
 
-const routeRequestObject = {
+const routeInfos = {
     startCity: undefined as CitysearchResult | undefined,
     destinationCity: undefined as CitysearchResult | undefined,
     startDate: new Date().toISOString().split(".")[0]
 }
 
 function startCityselected(ev: CitysearchResult) {
-    routeRequestObject.startCity = {
+    routeInfos.startCity = {
         display_name: ev.display_name,
         lat: ev.lat,
         lon: ev.lon
@@ -43,11 +44,15 @@ function startCityselected(ev: CitysearchResult) {
 }
 
 function destCityselected(ev: CitysearchResult) {
-    routeRequestObject.destinationCity = {
+    routeInfos.destinationCity = {
         display_name: ev.display_name,
         lat: ev.lat,
         lon: ev.lon
     }
+}
+
+function getroute(){
+    emit("sendrouterequest", routeInfos)
 }
 
 </script>
