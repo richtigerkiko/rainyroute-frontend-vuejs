@@ -14,6 +14,7 @@
 import type { CitysearchResult } from "@/models/citysearchResult";
 import { onMounted, ref } from "vue";
 import { Dropdown } from "bootstrap"; 
+import { searchCityWithNomatim } from "@/services/apiservices";
 
 defineProps({
     searchtitle: String
@@ -28,14 +29,20 @@ var search = ref("")
 
 var results = ref([] as CitysearchResult[])
 
-var selectedResult = ref(null as unknown as CitysearchResult)
 
 async function getResults(){
-    if(search.value.length > 3){
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${search.value}&format=json&limit=5`);
+    if (search.value.length > 3) {
+        // make api call
+        const apicall = searchCityWithNomatim(search.value)
+
+        // clear current searchlist while call is made
         results.value = []
-        const responseResult = await response.json() as CitysearchResult[]
-        responseResult.forEach(element => {
+
+        // wait for call result
+        const apiResult = await apicall
+
+        // fill List with Items from apicall
+        apiResult.forEach(element => {
             results.value.push(element)
         });
         dropdownList.show()
@@ -52,5 +59,6 @@ function selectResult(result: CitysearchResult) {
       emit('resultSelected', result);
       dropdownList.hide()
     }
+
 
 </script>
