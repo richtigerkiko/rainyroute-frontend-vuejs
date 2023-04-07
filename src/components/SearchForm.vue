@@ -18,7 +18,7 @@
         </div>
         <div class="row mb-3">
             <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary" @click="getroute">Go</button>
+                <button class="btn btn-primary" :class="{ disabled: !buttonActivator }" @click="getroute">Go</button>
             </div>
         </div>
     </div>
@@ -28,16 +28,23 @@
 import type { CitysearchResult } from "@/models/citysearchResult";
 import Searchbar from "./Searchbar.vue"
 import type { routeRequestObject } from "@/models/routeRequestObject";
+import { reactive, ref } from "vue";
+import { computed } from "@vue/reactivity";
 const emit = defineEmits(['sendrouterequest'])
 
-let routeInfos = {
+
+const routeInfos = ref({
     startCity: undefined as CitysearchResult | undefined,
     destinationCity: undefined as CitysearchResult | undefined,
     startDate: new Date().toISOString().split(".")[0]
-}
+})
+
+const buttonActivator = computed(() => {
+    return (routeInfos.value.startCity != undefined) && (routeInfos.value.destinationCity != undefined)})
+
 
 function startCityselected(ev: CitysearchResult) {
-    routeInfos.startCity = {
+    routeInfos.value.startCity = {
         display_name: ev.display_name,
         lat: ev.lat,
         lon: ev.lon
@@ -45,7 +52,7 @@ function startCityselected(ev: CitysearchResult) {
 }
 
 function destCityselected(ev: CitysearchResult) {
-    routeInfos.destinationCity = {
+    routeInfos.value.destinationCity = {
         display_name: ev.display_name,
         lat: ev.lat,
         lon: ev.lon
@@ -57,16 +64,16 @@ function getroute() {
     // generate routerequestobject from routeinfo variable
     let requestObject: routeRequestObject = {
         CoordinatesStart: {
-            Latitude: Number.parseFloat(routeInfos.startCity?.lat ?? "0"),
-            Longitude: Number.parseFloat(routeInfos.startCity?.lon ?? "0")
+            Latitude: Number.parseFloat(routeInfos.value.startCity?.lat ?? "0"),
+            Longitude: Number.parseFloat(routeInfos.value.startCity?.lon ?? "0")
         },
-        CoordinatesDestination:  {
-            Latitude: Number.parseFloat(routeInfos.destinationCity?.lat ?? "0"),
-            Longitude: Number.parseFloat(routeInfos.destinationCity?.lon ?? "0")
+        CoordinatesDestination: {
+            Latitude: Number.parseFloat(routeInfos.value.destinationCity?.lat ?? "0"),
+            Longitude: Number.parseFloat(routeInfos.value.destinationCity?.lon ?? "0")
         },
         StartTime: new Date()
     }
-    
+
     emit("sendrouterequest", requestObject)
 }
 
