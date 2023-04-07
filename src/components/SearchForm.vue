@@ -27,9 +27,10 @@
 <script setup lang="ts">
 import type { CitysearchResult } from "@/models/citysearchResult";
 import Searchbar from "./Searchbar.vue"
+import type { routeRequestObject } from "@/models/routeRequestObject";
 const emit = defineEmits(['sendrouterequest'])
 
-const routeInfos = {
+let routeInfos = {
     startCity: undefined as CitysearchResult | undefined,
     destinationCity: undefined as CitysearchResult | undefined,
     startDate: new Date().toISOString().split(".")[0]
@@ -51,8 +52,22 @@ function destCityselected(ev: CitysearchResult) {
     }
 }
 
-function getroute(){
-    emit("sendrouterequest", routeInfos)
+function getroute() {
+
+    // generate routerequestobject from routeinfo variable
+    let requestObject: routeRequestObject = {
+        CoordinatesStart: {
+            Latitude: Number.parseFloat(routeInfos.startCity?.lat ?? "0"),
+            Longitude: Number.parseFloat(routeInfos.startCity?.lon ?? "0")
+        },
+        CoordinatesDestination:  {
+            Latitude: Number.parseFloat(routeInfos.destinationCity?.lat ?? "0"),
+            Longitude: Number.parseFloat(routeInfos.destinationCity?.lon ?? "0")
+        },
+        StartTime: new Date()
+    }
+    
+    emit("sendrouterequest", requestObject)
 }
 
 </script>

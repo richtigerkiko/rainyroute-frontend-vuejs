@@ -1,26 +1,16 @@
 export interface RouteApiResponseObject {
-    coordinatesStart: CoordinatesStart
-    coordinatesDestination: CoordinatesDestination
+    coordinatesStart: GeoCoordinates
+    coordinatesDestination: GeoCoordinates
     startTime: string
     finishTime: string
-    geoWeatherObjects: GeoWeatherObject[]
+    weatherRoutePoints: WeatherRoutePoint[]
     polyLine: string
-  }
-  
-  export interface CoordinatesStart {
-    latitude: number
-    longitude: number
-  }
-  
-  export interface CoordinatesDestination {
-    latitude: number
-    longitude: number
-  }
-  
-  export interface GeoWeatherObject {
+}
+    
+  export interface WeatherRoutePoint {
     totalDistance: number
     distanceFromLastPoint: number
-    coordinates: Coordinates
+    coordinates: GeoCoordinates
     totalDuration: number
     durationFromLastPoint: number
     direction: number
@@ -28,9 +18,13 @@ export interface RouteApiResponseObject {
     completeForecast: CompleteForecast[]
   }
   
-  export interface Coordinates {
+  export interface GeoCoordinates {
     latitude: number
     longitude: number
+    altitude: number,
+    speed: number,
+    course: number,
+    cardinalDirection: CardinalDirection
   }
   
   export interface WeatherForecastAtDuration {
@@ -111,3 +105,15 @@ export interface RouteApiResponseObject {
     uv: number
   }
   
+  enum CardinalDirection
+  {
+      North = 0,
+      South = 4,
+      East = 6,
+      West = 2,
+      Northeast = 7,
+      Northwest = 1,
+      Southeast = 5,
+      Southwest = 3,
+      Undefined = -1
+  }

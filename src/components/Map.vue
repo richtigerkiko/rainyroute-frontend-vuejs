@@ -47,9 +47,9 @@ function drawRoute() {
 
 function drawWeather(){
     if(props.routeApiObject && map){
-        props.routeApiObject.geoWeatherObjects.forEach(weatherObj => {
-            let weatherforecast = weatherObj.weatherForecastAtDuration
-            L.marker([weatherObj.coordinates.latitude, weatherObj.coordinates.longitude], {
+        props.routeApiObject.weatherRoutePoints.forEach(weatherRoutePoint => {
+            let weatherforecast = weatherRoutePoint.weatherForecastAtDuration
+            L.marker([weatherRoutePoint.coordinates.latitude, weatherRoutePoint.coordinates.longitude], {
                 
                 icon: L.icon({
                     iconUrl: weatherforecast.condition.icon,
