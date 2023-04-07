@@ -1,10 +1,10 @@
 <template>
-  <div class="container h-100">
-    <SearchForm @sendrouterequest="getWeatherRoute"/>
-    <div class="row h-50">
-      <div class="col">
+  <div class="container d-flex flex-column h-100 flex-wrap">
+    <div class="w-100">
+      <SearchForm @sendrouterequest="getWeatherRoute"/>
+    </div>
+    <div class="flex-grow-1 w-100">
           <Map :routeApiObject="routeApiObject" :key="routeApiObject?.startTime" />
-      </div>
     </div>
   </div>
 </template>
