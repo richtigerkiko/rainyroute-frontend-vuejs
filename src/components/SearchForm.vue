@@ -1,24 +1,24 @@
 <template>
     <div class="container mt-3">
         <div class="row">
-            <div class="col">
-                <Searchbar searchtitle="Start City" @resultSelected="startCityselected"></Searchbar>
+            <div class="col-12 col-sm-6">
+                <Searchbar searchtitle="Start City" @resultSelected="startCityselected" />
             </div>
-            <div class="col">
-                <Searchbar searchtitle="Destination City" @resultSelected="destCityselected"></Searchbar>
+            <div class="col-12 col-sm-6">
+                <Searchbar searchtitle="Destination City" @resultSelected="destCityselected" />
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <div class="input-group m-3">
+            <div class="col-12 col-sm-6 mb-3">
+                <div class="input-group">
                     <span class="input-group-text" id="basic-addon1">Start Date</span>
                     <input type="datetime-local" class="form-control" v-model="routeInfos.startDate">
                 </div>
             </div>
-        </div>
-        <div class="row mb-3">
-            <div class="d-grid gap-2 col-6 mx-auto">
-                <button class="btn btn-primary" :class="{ disabled: !buttonActivator }" @click="getroute">Go</button>
+            <div class="col-12 col-sm-6 mb-3">
+                <div class="d-grid gap-2 mx-auto">
+                    <button class="btn btn-primary" :class="{ disabled: !buttonActivator }" @click="getroute">Go</button>
+                </div>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
 import type { CitysearchResult } from "@/models/citysearchResult";
 import Searchbar from "./Searchbar.vue"
 import type { routeRequestObject } from "@/models/routeRequestObject";
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { computed } from "@vue/reactivity";
 const emit = defineEmits(['sendrouterequest'])
 
