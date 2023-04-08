@@ -4,14 +4,15 @@
 
 <script setup lang="ts">
 
-import L from "leaflet"
+import L, { LatLngBounds, latLngBounds } from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { onMounted, type ComponentObjectPropsOptions } from "vue";
-import type { RouteApiResponseObject } from '../models/RouteApiResponseObject';
+import type { NewRouteApiResponseObject } from '../models/NewRouteApiResponseObject';
 import polyline from '@mapbox/polyline'
 
 const props = defineProps<{
-    routeApiObject: RouteApiResponseObject | undefined
+    routeApiObject: NewRouteApiResponseObject | undefined,
+    isDebug: boolean
 }>()
 
 let map = undefined as L.Map | undefined
@@ -30,11 +31,15 @@ onMounted(() => {
 
         // draw route
         drawRoute();
-
         //
         drawWeather();
 
+        if (props.isDebug) {
+            drawBoundingBoxes();
+        }
         setZoom();
+
+
     }
 })
 
@@ -47,18 +52,24 @@ function drawRoute() {
 
 function drawWeather(){
     if(props.routeApiObject && map){
-        props.routeApiObject.weatherRoutePoints.forEach(weatherRoutePoint => {
-            let weatherforecast = weatherRoutePoint.weatherForecastAtDuration
-            L.marker([weatherRoutePoint.coordinates.latitude, weatherRoutePoint.coordinates.longitude], {
+        props.routeApiObject.passedBoundingBoxes.forEach(bbox => {
+            let weatherforecast = bbox.weatherForeCastHours
+            L.marker([bbox.centerOfBoundingBox.latitude, bbox.centerOfBoundingBox.longitude], {
                 
                 icon: L.icon({
-                    iconUrl: weatherforecast.condition.icon,
+                    iconUrl: weatherforecast[11].weatherAPIComIconURL,
                     iconSize: [50, 50]
                 })
-            }).addTo(map!).bindPopup(`${weatherforecast.condition.text} at ${weatherforecast.time}`).openPopup()
+            }).addTo(map!)
             
         });
     }
+}
+
+function drawBoundingBoxes() {
+    props.routeApiObject!.passedBoundingBoxes.forEach(bbox => {
+        L.rectangle([[bbox.minCoordinate.latitude, bbox.minCoordinate.longitude], [bbox.maxCoordinate.latitude, bbox.maxCoordinate.longitude]], {color: "#003355", weight: 3}).addTo(map!)
+    })
 }
 
 function setZoom(){

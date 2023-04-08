@@ -4,7 +4,8 @@
       <SearchForm @sendrouterequest="getWeatherRoute"/>
     </div>
     <div class="flex-grow-1 w-100">
-          <Map :routeApiObject="routeApiObject" :key="routeApiObject?.startTime" />
+      <Map :routeApiObject="routeApiObject" :key="routeApiObject?.startTime + isDebug" :isDebug="isDebug" />
+      <input type="checkbox" v-model="isDebug"> {{ isDebug }}
     </div>
   </div>
 </template>
@@ -14,12 +15,12 @@
 import { ref } from 'vue';
 import Map from './components/Map.vue'
 import SearchForm from './components/SearchForm.vue';
-import type { RouteApiResponseObject } from './models/RouteApiResponseObject';
+import type { NewRouteApiResponseObject } from './models/NewRouteApiResponseObject';
 import type { routeRequestObject } from './models/routeRequestObject';
 import { sendRouteRequest } from './services/apiservices';
 
-const routeApiObject = ref(undefined as RouteApiResponseObject | undefined)
-
+const routeApiObject = ref(undefined as NewRouteApiResponseObject | undefined)
+const isDebug = ref(false)
 async function getWeatherRoute(request: routeRequestObject){
   const response = await sendRouteRequest(request)
   routeApiObject.value = response

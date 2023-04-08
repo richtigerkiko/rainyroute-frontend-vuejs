@@ -1,11 +1,12 @@
+import type { NewRouteApiResponseObject } from "@/models/NewRouteApiResponseObject";
 import type { RouteApiResponseObject } from "@/models/RouteApiResponseObject";
 import type { CitysearchResult } from "@/models/citysearchResult";
 import type { routeRequestObject } from "@/models/routeRequestObject";
 
-export async function sendRouteRequest(request: routeRequestObject): Promise<RouteApiResponseObject>{
+export async function sendRouteRequest(request: routeRequestObject): Promise<NewRouteApiResponseObject>{
 
     const baseUrl = import.meta.env.VITE_APIBASEURL_RAINYROUTE
-    const endpoint = "/WeatherRoute/GetWeatherRoute"
+    const endpoint = "/WeatherRoute/GetNewWeatherRoute"
 
     const url = baseUrl + endpoint
 
@@ -17,7 +18,7 @@ export async function sendRouteRequest(request: routeRequestObject): Promise<Rou
         method: 'POST',
         body: JSON.stringify(request)
     });
-    const responseResult = await response.json() as RouteApiResponseObject
+    const responseResult = await response.json() as NewRouteApiResponseObject
     
     return responseResult
 }
