@@ -19,7 +19,7 @@ const props = defineProps<{
 
 let map = undefined as L.Map | undefined
 
-let line = [[0,0]] as [number, number][]
+let line = [[0, 0]] as [number, number][]
 
 onMounted(() => {
     map = L.map('map')
@@ -38,7 +38,7 @@ onMounted(() => {
     }
     if (props.isDebug) {
         console.log("debug")
-            
+
         if (props.fullWeatherMap.length > 0) {
             console.log("bing")
             drawFullWeatherMap()
@@ -48,48 +48,65 @@ onMounted(() => {
 })
 
 function drawRoute() {
-    if(props.routeApiObject && map){
+    if (props.routeApiObject && map) {
         line = polyline.decode(props.routeApiObject.polyLine);
         L.polyline(line).addTo(map);
     }
 }
 
-function drawWeather(){
-    if(props.routeApiObject && map){
+function drawWeather() {
+    if (props.routeApiObject && map) {
         props.routeApiObject.passedBoundingBoxes.forEach(bbox => {
             let weatherforecast = bbox.weatherForecastAtDuration
             L.marker([bbox.coordinateClostestToCenter.latitude, bbox.coordinateClostestToCenter.longitude], {
-                
+
                 icon: L.icon({
                     iconUrl: weatherforecast.weatherAPIComIconURL,
                     iconSize: [50, 50]
                 })
             }).addTo(map!)
-            
+
+            if (props.isDebug) {
+
+                drawDebugRaster(bbox);
+            }
+
         });
     }
 }
 
-function setZoom(){
-    map?.fitBounds(L.latLngBounds((line[0]), line[line.length -1]))
+function setZoom() {
+    map?.fitBounds(L.latLngBounds((line[0]), line[line.length - 1]))
 
 }
+
 
 
 function drawFullWeatherMap() {
     var bboxs = props.fullWeatherMap!
     bboxs.forEach(bbox => {
-        L.rectangle([[bbox.minCoordinate.latitude, bbox.minCoordinate.longitude], [bbox.maxCoordinate.latitude, bbox.maxCoordinate.longitude]], { color: "#0033AA", weight: 2 }).addTo(map!)
         L.marker([bbox.centerOfBoundingBox.latitude, bbox.centerOfBoundingBox.longitude], {
-                icon: L.icon({
-                    iconUrl: bbox.weatherForeCastHours[(Number.parseInt(props.showHour))].weatherAPIComIconURL,
-                    iconSize: [50, 50]
-                })
+            icon: L.icon({
+                iconUrl: bbox.weatherForeCastHours[(Number.parseInt(props.showHour))].weatherAPIComIconURL,
+                iconSize: [50, 50]
+            })
         }).addTo(map!)
+        drawDebugRaster(bbox)
     })
-    
+
     map?.fitBounds([[bboxs[0].minCoordinate.latitude, bboxs[0].minCoordinate.longitude], [bboxs[bboxs.length - 1].maxCoordinate.latitude, bboxs[bboxs.length - 1].maxCoordinate.longitude]])
 }
+
+function drawDebugRaster(bbox: PassedBoundingBox) {
+    L.marker([bbox.maxCoordinate.latitude - 0.01, bbox.minCoordinate.longitude + 0.02], {
+        icon: L.divIcon({
+            className: 'text-danger',
+            html: bbox.id
+        })
+    }).addTo(map!);
+    L.rectangle([[bbox.minCoordinate.latitude, bbox.minCoordinate.longitude], [bbox.maxCoordinate.latitude, bbox.maxCoordinate.longitude]], { color: "#0033AA", weight: 2 }).addTo(map!);
+}
+
 </script>
 
 <style>

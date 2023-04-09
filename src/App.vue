@@ -34,6 +34,7 @@ const fullWeatherMap = ref([] as PassedBoundingBox[])
 const rangeSelect = ref("0")
 
 const isDebug = ref(false)
+
 async function getWeatherRoute(request: routeRequestObject) {
   const response = await sendRouteRequest(request)
   routeApiObject.value = response
