@@ -23,6 +23,26 @@ export async function sendRouteRequest(request: routeRequestObject): Promise<New
     return responseResult
 }
 
+export async function sendRainyRouteRequest(request: routeRequestObject): Promise<NewRouteApiResponseObject>{
+
+    const baseUrl = import.meta.env.VITE_APIBASEURL_RAINYROUTE
+    const endpoint = "/WeatherRoute/GetRouteWhenMostRain"
+
+    const url = baseUrl + endpoint
+
+    const response = await fetch(url, {
+      headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(request)
+    });
+    const responseResult = await response.json() as NewRouteApiResponseObject
+    
+    return responseResult
+}
+
 export async function getFullWeatherMap():  Promise<PassedBoundingBox[]>{
     const baseUrl = import.meta.env.VITE_APIBASEURL_RAINYROUTE
     const endpoint = "/WeatherRoute/GetFullWeatherMap"

@@ -1,7 +1,7 @@
 export interface NewRouteApiResponseObject {
   coordinatesStart: Coordinates
   coordinatesDestination: Coordinates
-  startTime: string
+  startTime: Date
   projectedFinishTime: string
   polyLine: string
   passedBoundingBoxes: PassedBoundingBox[]

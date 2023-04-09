@@ -16,8 +16,9 @@
                 </div>
             </div>
             <div class="col-12 col-sm-6 mb-3">
-                <div class="d-grid gap-2 mx-auto">
-                    <button class="btn btn-primary" :class="{ disabled: !buttonActivator }" @click="getroute">Go</button>
+                <div class="d-flex gap-2 mx-auto">
+                    <button class="btn btn-primary w-50" :class="{ disabled: !buttonActivator }" @click="getroute('normal')">Go</button>
+                    <button class="btn btn-danger w-50" :class="{ disabled: !buttonActivator }" @click="getroute('rainy')">Rainy</button>
                 </div>
             </div>
         </div>
@@ -59,7 +60,7 @@ function destCityselected(ev: CitysearchResult) {
     }
 }
 
-function getroute() {
+function getroute(mode:string) {
 
     // generate routerequestobject from routeinfo variable
     let requestObject: routeRequestObject = {
@@ -71,10 +72,10 @@ function getroute() {
             Latitude: Number.parseFloat(routeInfos.value.destinationCity?.lat ?? "0"),
             Longitude: Number.parseFloat(routeInfos.value.destinationCity?.lon ?? "0")
         },
-        StartTime: new Date()
+        StartTime: routeInfos.value.startDate
     }
 
-    emit("sendrouterequest", requestObject)
+    emit("sendrouterequest", requestObject, mode)
 }
 
 </script>

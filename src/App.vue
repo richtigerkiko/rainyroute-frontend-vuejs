@@ -3,6 +3,9 @@
     <div class="w-100">
       <SearchForm @sendrouterequest="getWeatherRoute" />
     </div>
+    <div class="w-100">
+      rainiest Starttime: {{ routeApiObject?.startTime }} - Projected Finish: {{ routeApiObject?.projectedFinishTime }}
+    </div>
     <div class="flex-grow-1 w-100">
       <Map :routeApiObject="routeApiObject" :key="(fullWeatherMap.length + (routeApiObject?.polyLine ?? '') + rangeSelect + isDebug)" :isDebug="isDebug"
         :fullWeatherMap="fullWeatherMap" :showHour="rangeSelect" />
@@ -27,7 +30,7 @@ import Map from './components/Map.vue'
 import SearchForm from './components/SearchForm.vue';
 import type { NewRouteApiResponseObject, PassedBoundingBox } from './models/NewRouteApiResponseObject';
 import type { routeRequestObject } from './models/routeRequestObject';
-import { getFullWeatherMap, sendRouteRequest } from './services/apiservices';
+import { getFullWeatherMap, sendRainyRouteRequest, sendRouteRequest } from './services/apiservices';
 
 const routeApiObject = ref(undefined as NewRouteApiResponseObject | undefined)
 const fullWeatherMap = ref([] as PassedBoundingBox[])
@@ -35,8 +38,15 @@ const rangeSelect = ref("0")
 
 const isDebug = ref(false)
 
-async function getWeatherRoute(request: routeRequestObject) {
-  const response = await sendRouteRequest(request)
+async function getWeatherRoute(request: routeRequestObject, mode:string) {
+
+  if (mode == "rainy") {
+    var response = await sendRainyRouteRequest(request)
+  }
+  else{
+    var response = await sendRouteRequest(request)
+  }
+
   routeApiObject.value = response
 }
 

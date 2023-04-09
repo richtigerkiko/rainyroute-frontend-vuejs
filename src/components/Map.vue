@@ -31,7 +31,8 @@ onMounted(() => {
 
         // draw route
         drawRoute();
-        //
+
+        // draw weather
         drawWeather();
 
         setZoom();
@@ -79,8 +80,6 @@ function setZoom() {
     map?.fitBounds(L.latLngBounds((line[0]), line[line.length - 1]))
 
 }
-
-
 
 function drawFullWeatherMap() {
     var bboxs = props.fullWeatherMap!
