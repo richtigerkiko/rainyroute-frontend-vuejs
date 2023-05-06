@@ -1,10 +1,7 @@
+import type { Point } from "geojson"
+
 export interface routeRequestObject {
-    CoordinatesStart: Coordinates | undefined
-    CoordinatesDestination: Coordinates | undefined
+    CoordinatesStart: Point | undefined
+    CoordinatesDestination: Point | undefined
     StartTime: Date | undefined | string
-  }
-  
-  export interface Coordinates {
-    Latitude: number
-    Longitude: number
   }

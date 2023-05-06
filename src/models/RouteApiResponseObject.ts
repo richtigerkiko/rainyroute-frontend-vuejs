@@ -1,6 +1,8 @@
+import type { Point } from "geojson"
+
 export interface RouteApiResponseObject {
-    coordinatesStart: GeoCoordinates
-    coordinatesDestination: GeoCoordinates
+    coordinatesStart: Point
+    coordinatesDestination: Point
     startTime: string
     finishTime: string
     weatherRoutePoints: WeatherRoutePoint[]
@@ -10,21 +12,12 @@ export interface RouteApiResponseObject {
   export interface WeatherRoutePoint {
     totalDistance: number
     distanceFromLastPoint: number
-    coordinates: GeoCoordinates
+    coordinates: Point
     totalDuration: number
     durationFromLastPoint: number
     direction: number
     weatherForecastAtDuration: WeatherForecastAtDuration
     completeForecast: CompleteForecast[]
-  }
-  
-  export interface GeoCoordinates {
-    latitude: number
-    longitude: number
-    altitude: number,
-    speed: number,
-    course: number,
-    cardinalDirection: CardinalDirection
   }
   
   export interface WeatherForecastAtDuration {

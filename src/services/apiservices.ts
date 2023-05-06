@@ -1,11 +1,12 @@
+import type { NewRouteApiResponseObject, PassedBoundingBox } from "@/models/NewRouteApiResponseObject";
 import type { RouteApiResponseObject } from "@/models/RouteApiResponseObject";
 import type { CitysearchResult } from "@/models/citysearchResult";
 import type { routeRequestObject } from "@/models/routeRequestObject";
 
-export async function sendRouteRequest(request: routeRequestObject): Promise<RouteApiResponseObject>{
+export async function sendRouteRequest(request: routeRequestObject): Promise<NewRouteApiResponseObject>{
 
     const baseUrl = import.meta.env.VITE_APIBASEURL_RAINYROUTE
-    const endpoint = "/WeatherRoute/GetWeatherRoute"
+    const endpoint = "/WeatherRoute/GetNewWeatherRoute"
 
     const url = baseUrl + endpoint
 
@@ -17,9 +18,40 @@ export async function sendRouteRequest(request: routeRequestObject): Promise<Rou
         method: 'POST',
         body: JSON.stringify(request)
     });
-    const responseResult = await response.json() as RouteApiResponseObject
+    const responseResult = await response.json() as NewRouteApiResponseObject
     
     return responseResult
+}
+
+export async function sendRainyRouteRequest(request: routeRequestObject): Promise<NewRouteApiResponseObject>{
+
+    const baseUrl = import.meta.env.VITE_APIBASEURL_RAINYROUTE
+    const endpoint = "WeatherRoute/GetRouteWithMostRain"
+
+    const url = baseUrl + endpoint
+
+    const response = await fetch(url, {
+      headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(request)
+    });
+    const responseResult = await response.json() as NewRouteApiResponseObject
+    
+    return responseResult
+}
+
+export async function getFullWeatherMap():  Promise<PassedBoundingBox[]>{
+    const baseUrl = import.meta.env.VITE_APIBASEURL_RAINYROUTE
+    const endpoint = "/WeatherRoute/GetFullWeatherMap"
+
+    const url = baseUrl + endpoint
+
+    const response = await fetch(url)
+
+    return await response.json() as PassedBoundingBox[]
 }
 
 export async function searchCityWithNomatim(searchString: string): Promise<CitysearchResult[]> {
