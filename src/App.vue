@@ -7,7 +7,7 @@
       rainiest Starttime: {{ routeApiObject?.startTime }} - Projected Finish: {{ routeApiObject?.projectedFinishTime }}
     </div>
     <div class="flex-grow-1 w-100">
-      <Map :routeApiObject="routeApiObject" :key="(fullWeatherMap + (routeApiObject?.startTime.toString() ?? '') + rangeSelect + isDebug)" :isDebug="isDebug"
+      <Map :routeApiObject="routeApiObject" :key="(fullWeatherMap + (routeApiObject?.startTime.toString() ?? '') + isDebug + rangeSelect)" :isDebug="isDebug"
         :fullWeatherMap="fullWeatherMap" :showHour="rangeSelect" />
     </div>
     <div class="w-100">
@@ -17,7 +17,7 @@
         <button type="button" class="btn btn-outline-secondary" v-if="isDebug" @click="requestWeatherMap">FullMap</button>
       </div>
       <div class="btn-group me-2">
-        <input type="range" class="form-control" id="customRange1" v-if="isDebug" v-model="rangeSelect" min="0" max="23"> {{ rangeSelect }}
+        <input type="range" class="form-control" id="customRange1" v-if="isDebug" v-model="rangeSelect" min="-1" max="23" @input="requestWeatherMap"> {{ rangeSelect }}
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@ import { getFullWeatherMap, sendWeatherRouteRequest } from './services/apiservic
 
 const routeApiObject = ref(undefined as NewRouteApiResponseObject | undefined)
 const fullWeatherMap = ref(undefined as FullWeatherMapResponse | undefined)
-const rangeSelect = ref("0")
+const rangeSelect = ref("-1")
 
 const isDebug = ref(false)
 
@@ -46,7 +46,15 @@ async function getWeatherRoute(request: routeRequestObject, mode:string) {
 }
 
 async function requestWeatherMap() {
-  const response = await getFullWeatherMap(8, 3)
+  const now = new Date()
+  const day = now.getDate()
+  let hour = now.getHours()
+
+  if (rangeSelect.value != "-1") {
+    hour = Number.parseInt(rangeSelect.value)
+  }
+
+  const response = await getFullWeatherMap(day, hour)
   fullWeatherMap.value = response
 }
 

@@ -86,14 +86,14 @@ function drawFullWeatherMap() {
     bboxs.forEach(bbox => {
         L.marker(toLatLngExpression(bbox.coordinateClostestToCenter.coordinates), {
             icon: L.icon({
-                iconUrl: bbox.weatherForeCastHours[(Number.parseInt(props.showHour))].weatherAPIComIconURL,
+                iconUrl: bbox.weatherForecastAtDuration.weatherAPIComIconURL,
                 iconSize: [50, 50]
             })
         }).addTo(map!)
         drawDebugRaster(bbox)
     })
 
-    map?.fitBounds(latLngBounds(toLatLngExpression(bboxs[0].coordinateClostestToCenter.coordinates), (toLatLngExpression(bboxs[bboxs.length - 1].coordinateClostestToCenter.coordinates))))
+    map?.fitBounds(latLngBounds([47.3024876979, 5.98865807458 ], [54.983104153, 15.0169958839]))
 
 }
 
