@@ -7,14 +7,14 @@
 import L, { LatLng, LatLngBounds, latLngBounds } from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { onMounted, type ComponentObjectPropsOptions } from "vue";
-import type { NewRouteApiResponseObject, PassedBoundingBox } from '../models/NewRouteApiResponseObject';
+import type { NewRouteApiResponseObject, FullWeatherMapResponse, PassedBoundingBox } from '../models/NewRouteApiResponseObject';
 import polyline from '@mapbox/polyline'
 import type { Position } from "geojson";
 
 const props = defineProps<{
     routeApiObject: NewRouteApiResponseObject | undefined,
     isDebug: boolean,
-    fullWeatherMap: PassedBoundingBox[],
+    fullWeatherMap: FullWeatherMapResponse | undefined,
     showHour: string
 }>()
 
@@ -41,7 +41,7 @@ onMounted(() => {
     if (props.isDebug) {
         console.log("debug")
 
-        if (props.fullWeatherMap.length > 0) {
+        if (props.fullWeatherMap != undefined) {
             console.log("bing")
             drawFullWeatherMap()
         }
@@ -67,7 +67,6 @@ function drawWeather() {
                     iconSize: [50, 50]
                 })
             }).addTo(map!)
-            drawDebugRaster(bbox);
             if (props.isDebug) {
 
                 drawDebugRaster(bbox);
@@ -83,9 +82,9 @@ function setZoom() {
 }
 
 function drawFullWeatherMap() {
-    var bboxs = props.fullWeatherMap!
+    var bboxs = props.fullWeatherMap?.fullWeatherMap!
     bboxs.forEach(bbox => {
-        L.marker(toLatLngExpression(bbox.centerOfBoundingBox.coordinates), {
+        L.marker(toLatLngExpression(bbox.coordinateClostestToCenter.coordinates), {
             icon: L.icon({
                 iconUrl: bbox.weatherForeCastHours[(Number.parseInt(props.showHour))].weatherAPIComIconURL,
                 iconSize: [50, 50]
@@ -94,7 +93,8 @@ function drawFullWeatherMap() {
         drawDebugRaster(bbox)
     })
 
-    // map?.fitBounds(toLatLngExpression(bboxs[0].minCoordinate.coordinates))
+    map?.fitBounds(latLngBounds(toLatLngExpression(bboxs[0].coordinateClostestToCenter.coordinates), (toLatLngExpression(bboxs[bboxs.length - 1].coordinateClostestToCenter.coordinates))))
+
 }
 
 function drawDebugRaster(bbox: PassedBoundingBox) {

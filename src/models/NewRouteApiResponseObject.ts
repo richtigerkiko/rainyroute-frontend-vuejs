@@ -9,6 +9,12 @@ export interface NewRouteApiResponseObject {
   passedBoundingBoxes: PassedBoundingBox[]
 }
 
+export interface FullWeatherMapResponse{
+  day: number
+  hour: number
+  fullWeatherMap: PassedBoundingBox[]
+}
+
 export interface PassedBoundingBox {
   timeClosestToCenter: string
   totalDurationClosestToCenter: number

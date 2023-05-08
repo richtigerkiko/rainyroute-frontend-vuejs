@@ -17,8 +17,9 @@
             </div>
             <div class="col-12 col-sm-6 mb-3">
                 <div class="d-flex gap-2 mx-auto">
-                    <button class="btn btn-primary w-50" :class="{ disabled: !buttonActivator }" @click="getroute('normal')">Go</button>
-                    <button class="btn btn-danger w-50" :class="{ disabled: !buttonActivator }" @click="getroute('rainy')">Rainy</button>
+                    <button class="btn btn-primary w-50" :class="{ disabled: !buttonActivator }" @click="getroute('Normal')">Normal</button>
+                    <button class="btn btn-warning w-50" :class="{ disabled: !buttonActivator }" @click="getroute('MostSun')">Most Sun</button>
+                    <button class="btn btn-danger w-50" :class="{ disabled: !buttonActivator }" @click="getroute('MostRain')">Most Rain</button>
                 </div>
             </div>
         </div>
